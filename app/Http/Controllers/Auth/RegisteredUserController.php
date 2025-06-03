@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
@@ -31,41 +30,22 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-        'nama' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        'alamat' => ['required', 'string', 'max:255'],
-        'no_hp' => ['required', 'string', 'max:50'],
-        'no_ktp' => ['required', 'string', 'max:255'],
-    ]);
-
-    $existingPatient = User::where('no_ktp', $request->no_ktp)->first();
-
-    if ($existingPatient) {
-        throw ValidationException::withMessages([
-            'email' => trans('auth.failed'),
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|confirmed|min:8',
+            // Tambahkan validasi role jika ingin memilih role saat register
+            // 'role' => 'required|in:dokter,pasien',
         ]);
-    }
 
-    $currentYearMonth = date('Ym');
-    $patientCount = User::where('no_rm', 'like', $currentYearMonth . '-%')->count();
-    $no_rm = $currentYearMonth . '-' . str_pad($patientCount + 1, 3, '0', STR_PAD_LEFT);
-
-    $user = User::create([
-        'nama' => $request->nama,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => 'pasien',
-        'alamat' => $request->alamat,
-        'no_hp' => $request->no_hp,
-        'no_ktp' => $request->no_ktp,
-        'no_rm' => $no_rm,
-    ]);
-
-    event(new Registered($user));
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'pasien', // Atau $request->role jika ingin memilih role saat register
+        ]);
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(RouteServiceProvider::HOME);
     }
 }

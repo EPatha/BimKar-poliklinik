@@ -52,7 +52,7 @@ class JadwalPeriksaController extends Controller
         $jadwal->status = !$jadwal->status;
         $jadwal->save();
 
-        return redirect()->route('jadwal-periksa')->with('success', 'Status jadwal berhasil diubah!');
+        return redirect()->route('jadwal-periksa')->with('success', 'Status jadwal berhasil diubah.');
     }
 
     public function edit($id)
@@ -95,6 +95,6 @@ class JadwalPeriksaController extends Controller
 
         $jadwal->delete();
 
-        return redirect()->route('jadwal-periksa')->with('success', 'Jadwal berhasil dihapus!');
+        return redirect()->route('jadwal-periksa')->with('success', 'Jadwal berhasil dihapus.');
     }
 }
