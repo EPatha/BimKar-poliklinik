@@ -49,9 +49,7 @@
 
                             <input type="hidden" name="status" value="1">
 
-                            <a type="button" href="#" class="btn btn-secondary">
-                                Batal
-                            </a>
+                            <a href="{{ route('jadwal-periksa') }}" class="btn btn-secondary">Batal</a>
                             <button type="submit" class="btn btn-primary">
                                 Simpan
                             </button>

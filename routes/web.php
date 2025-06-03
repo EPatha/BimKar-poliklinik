@@ -42,6 +42,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/jadwal-periksa', [JadwalPeriksaController::class, 'index'])->name('jadwal-periksa');
         Route::get('/jadwal-periksa/create', [JadwalPeriksaController::class, 'create'])->name('jadwal-periksa.create');
         Route::post('/jadwal-periksa', [JadwalPeriksaController::class, 'store'])->name('jadwal-periksa.store');
+        Route::patch('/jadwal-periksa/{id}/toggle', [JadwalPeriksaController::class, 'toggleStatus'])->name('jadwal-periksa.toggle');
+        Route::get('/jadwal-periksa/{id}/edit', [JadwalPeriksaController::class, 'edit'])->name('jadwal-periksa.edit');
+        Route::put('/jadwal-periksa/{id}', [JadwalPeriksaController::class, 'update'])->name('jadwal-periksa.update');
+        Route::delete('/jadwal-periksa/{id}', [JadwalPeriksaController::class, 'destroy'])->name('jadwal-periksa.destroy');
     });
 });
 

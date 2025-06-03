@@ -57,7 +57,21 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="align-middle text-start">
-                                        <!-- Tombol aksi -->
+                                        <form action="<?php echo e(route('jadwal-periksa.toggle', $jadwal->id)); ?>" method="POST" style="display:inline;">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('PATCH'); ?>
+                                            <?php if($jadwal->status): ?>
+                                                <button type="submit" class="btn btn-warning btn-sm">Nonaktifkan</button>
+                                            <?php else: ?>
+                                                <button type="submit" class="btn btn-success btn-sm">Aktifkan</button>
+                                            <?php endif; ?>
+                                        </form>
+                                        <a href="<?php echo e(route('jadwal-periksa.edit', $jadwal->id)); ?>" class="btn btn-info btn-sm ms-1">Edit</a>
+                                        <form action="<?php echo e(route('jadwal-periksa.destroy', $jadwal->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus jadwal ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <button type="submit" class="btn btn-danger btn-sm ms-1">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

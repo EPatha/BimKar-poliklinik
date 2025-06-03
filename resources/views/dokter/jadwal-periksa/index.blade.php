@@ -46,7 +46,21 @@
                                         @endif
                                     </td>
                                     <td class="align-middle text-start">
-                                        <!-- Tombol aksi -->
+                                        <form action="{{ route('jadwal-periksa.toggle', $jadwal->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('PATCH')
+                                            @if($jadwal->status)
+                                                <button type="submit" class="btn btn-warning btn-sm">Nonaktifkan</button>
+                                            @else
+                                                <button type="submit" class="btn btn-success btn-sm">Aktifkan</button>
+                                            @endif
+                                        </form>
+                                        <a href="{{ route('jadwal-periksa.edit', $jadwal->id) }}" class="btn btn-info btn-sm ms-1">Edit</a>
+                                        <form action="{{ route('jadwal-periksa.destroy', $jadwal->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus jadwal ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm ms-1">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
