@@ -16,7 +16,7 @@
                         </h2>
 
                         <div class="flex-col items-center justify-center text-center">
-                            <a type="button" class="btn btn-primary" href="#">Tambah Jadwal Periksa</a>
+                            <a type="button" class="btn btn-primary" href="{{ route('jadwal-periksa.create') }}">Tambah Jadwal Periksa</a>
                         </div>
                     </header>
 
@@ -32,45 +32,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row" class="align-middle text-start">1</th>
-                                <td class="align-middle text-start">Senin</td>
-                                <td class="align-middle text-start">08.00</td>
-                                <td class="align-middle text-start">12.00</td>
-                                <td class="align-middle text-start">
-                                    <span class="badge badge-pill badge-success">Aktif</span>
-                                </td>
-                                <td class="align-middle text-start">
-                                    <button type="button" class="btn btn-success btn-sm">Aktifkan</button>
-                                    <button type="button" class="btn btn-danger btn-sm">Nonaktifkan</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="align-middle text-start">2</th>
-                                <td class="align-middle text-start">Selasa</td>
-                                <td class="align-middle text-start">13.00</td>
-                                <td class="align-middle text-start">17.00</td>
-                                <td class="align-middle text-start">
-                                    <span class="badge badge-pill badge-danger">Tidak Aktif</span>
-                                </td>
-                                <td class="align-middle text-start">
-                                    <button type="button" class="btn btn-success btn-sm">Aktifkan</button>
-                                    <button type="button" class="btn btn-danger btn-sm">Nonaktifkan</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="align-middle text-start">3</th>
-                                <td class="align-middle text-start">Rabu</td>
-                                <td class="align-middle text-start">09.00</td>
-                                <td class="align-middle text-start">15.00</td>
-                                <td class="align-middle text-start">
-                                    <span class="badge badge-pill badge-success">Aktif</span>
-                                </td>
-                                <td class="align-middle text-start">
-                                    <button type="button" class="btn btn-success btn-sm">Aktifkan</button>
-                                    <button type="button" class="btn btn-danger btn-sm">Nonaktifkan</button>
-                                </td>
-                            </tr>
+                            @foreach($jadwalPeriksa as $no => $jadwal)
+                                <tr>
+                                    <th scope="row" class="align-middle text-start">{{ $no+1 }}</th>
+                                    <td class="align-middle text-start">{{ $jadwal->hari }}</td>
+                                    <td class="align-middle text-start">{{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }}</td>
+                                    <td class="align-middle text-start">{{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}</td>
+                                    <td class="align-middle text-start">
+                                        @if($jadwal->status)
+                                            <span class="badge badge-pill badge-success">Aktif</span>
+                                        @else
+                                            <span class="badge badge-pill badge-danger">Tidak Aktif</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-start">
+                                        <!-- Tombol aksi -->
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </section>
