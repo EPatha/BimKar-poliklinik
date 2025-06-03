@@ -39,8 +39,8 @@
                             <input type="time" class="form-control" id="jamSelesai" name="jam_selesai" value="<?php echo e($jadwal->jam_selesai); ?>" required>
                         </div>
                         <input type="hidden" name="status" value="<?php echo e($jadwal->status); ?>">
-                        <a href="<?php echo e(route('jadwal-periksa')); ?>" class="btn btn-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a href="<?php echo e(route('jadwal-periksa')); ?>" class="bg-red-500 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2 rounded transition">Batal</a>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white text-xs font-semibold px-4 py-2 rounded transition">Update</button>
                     </form>
                 </div>
             </div>

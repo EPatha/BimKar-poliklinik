@@ -37,8 +37,8 @@
                         <input type="number" name="harga" class="form-control"
                             value="<?php echo e($obat->harga); ?>" required>
                     </div>
-                    <a href="<?php echo e(route('dokter.obat.index')); ?>" class="btn btn-secondary">Batal</a>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="<?php echo e(route('dokter.obat.index')); ?>" class="bg-red-600 hover:bg-red-800 text-white text-xs font-semibold px-4 py-2 rounded transition">Batal</a>
+                    <button type="submit" class="bg-green-600 hover:bg-green-800 text-white text-xs font-semibold px-4 py-2 rounded transition">Update</button>
                 </form>
             </div>
         </div>

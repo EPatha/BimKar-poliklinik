@@ -18,37 +18,65 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <a href="<?php echo e(route('dokter.obat.create')); ?>" class="btn btn-primary mb-3">Tambah Obat</a>
+            <!-- Tombol tambah obat -->
+            <div class="mb-4 flex justify-end">
+                <a href="<?php echo e(route('dokter.obat.create')); ?>"
+                   class="inline-block bg-green-500 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded transition">
+                    Tambah Obat
+                </a>
+            </div>
+            <?php if(session('success')): ?>
+                <div 
+                    x-data="{ show: true }" 
+                    x-show="show" 
+                    x-init="setTimeout(() => show = false, 3000)" 
+                    x-transition 
+                    class="mb-4 px-4 py-3 rounded bg-green-100 border border-green-400 text-green-800 flex items-center justify-between"
+                >
+                    <span><?php echo e(session('success')); ?></span>
+                    <button @click="show = false" class="ml-4 text-green-900 font-bold">&times;</button>
+                </div>
+            <?php endif; ?>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Obat</th>
-                            <th>Kemasan</th>
-                            <th>Harga</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $__currentLoopData = $obats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $no => $obat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <td><?php echo e($no+1); ?></td>
-                            <td><?php echo e($obat->nama_obat); ?></td>
-                            <td><?php echo e($obat->kemasan); ?></td>
-                            <td>Rp<?php echo e(number_format($obat->harga,0,',','.')); ?></td>
-                            <td>
-                                <a href="<?php echo e(route('dokter.obat.edit', $obat->id)); ?>" class="btn btn-info btn-sm">Edit</a>
-                                <form action="<?php echo e(route('dokter.obat.destroy', $obat->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('DELETE'); ?>
-                                    <button type="submit" class="btn btn-danger btn-sm ms-1">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="min-w-[700px] w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Obat</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kemasan</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <?php $__currentLoopData = $obats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $no => $obat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td class="px-6 py-4"><?php echo e($no+1); ?></td>
+                                <td class="px-6 py-4"><?php echo e($obat->nama_obat); ?></td>
+                                <td class="px-6 py-4"><?php echo e($obat->kemasan); ?></td>
+                                <td class="px-6 py-4">Rp<?php echo e(number_format($obat->harga,0,',','.')); ?></td>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-row flex-wrap gap-2">
+                                        <a href="<?php echo e(route('dokter.obat.edit', $obat->id)); ?>"
+                                           class="bg-blue-600 hover:bg-blue-800 text-white text-xs font-semibold px-4 py-2 rounded transition">
+                                            Edit
+                                        </a>
+                                        <form action="<?php echo e(route('dokter.obat.destroy', $obat->id)); ?>" method="POST" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <button type="submit"
+                                                    class="bg-red-600 hover:bg-red-800 text-white text-xs font-semibold px-4 py-2 rounded transition">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
