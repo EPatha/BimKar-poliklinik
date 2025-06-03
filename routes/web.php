@@ -4,6 +4,7 @@ use App\Models\Obat;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Dokter\JadwalPeriksaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,6 +13,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dokter/jadwal-periksa', function () {
+    return view('dokter.jadwal-periksa.index');
+})->middleware(['auth', 'verified'])->name('jadwal-periksa');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,10 +36,12 @@ Route::middleware('auth')->group(function () {
             Route::put('/update/{id}', [ObatController::class, 'update'])->name('dokter.obat.update');
 
             Route::delete('destroy/{id}', [ObatController::class, 'destroy'])->name('dokter.obat.destroy');
-
-
         });
 
+        // Jadwal Periksa
+        Route::get('/jadwal-periksa', [JadwalPeriksaController::class, 'index'])->name('jadwal-periksa');
+        Route::get('/jadwal-periksa/create', [JadwalPeriksaController::class, 'create'])->name('jadwal-periksa.create');
+        Route::post('/jadwal-periksa', [JadwalPeriksaController::class, 'store'])->name('jadwal-periksa.store');
     });
 });
 
