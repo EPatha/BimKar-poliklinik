@@ -2,54 +2,43 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Obat') }}
+            {{ __('Daftar Obat') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
-            <div class="p-4 bg-white shadow-sm sm:p-8 sm:rounded-lg">
-                <section>
-                    <header class="flex items-center justify-between">
-                        <h2 class="text-lg font-medium text-gray-900">
-                            {{ __('Daftar Obat') }}
-                        </h2>
-
-                        <div class="flex-col items-center justify-center text-center">
-                            <a href="{{route('dokter.obat.create')}}" class="btn btn-primary">Tambah Obat</a>
-                        </div>
-                    </header>
-
-                    <table class="table mt-6 overflow-hidden rounded table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Nama Obat</th>
-                                <th scope="col">Kemasan</th>
-                                <th scope="col">Harga</th>
-                                <th scope="col">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($obats as $obat )
-                            <tr>
-                                <th scope="row" class="align-middle text-start">{{ $obat->id }}</th>
-                                <td class="align-middle text-start">{{ $obat->nama_obat }}</td>
-                                <td class="align-middle text-start">{{ $obat->kemasan }}</td>
-                                <td class="align-middle text-start">{{ $obat->harga }}</td>
-                                <td class="flex items-center gap-3">
-                                    <a href="{{route('dokter.obat.edit', $obat->id  )}}" class="btn btn-secondary btn-sm">Edit</a>
-                                    <form action="{{route('dokter.obat.destroy', $obat->id)}}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </section>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <a href="{{ route('dokter.obat.create') }}" class="btn btn-primary mb-3">Tambah Obat</a>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Obat</th>
+                            <th>Kemasan</th>
+                            <th>Harga</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($obats as $no => $obat)
+                        <tr>
+                            <td>{{ $no+1 }}</td>
+                            <td>{{ $obat->nama_obat }}</td>
+                            <td>{{ $obat->kemasan }}</td>
+                            <td>Rp{{ number_format($obat->harga,0,',','.') }}</td>
+                            <td>
+                                <a href="{{ route('dokter.obat.edit', $obat->id) }}" class="btn btn-info btn-sm">Edit</a>
+                                <form action="{{ route('dokter.obat.destroy', $obat->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm ms-1">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
