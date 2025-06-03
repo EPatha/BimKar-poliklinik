@@ -49,8 +49,8 @@
 
                             <input type="hidden" name="status" value="1">
 
-                            <a href="{{ route('jadwal-periksa') }}" class="btn btn-secondary">Batal</a>
-                            <button type="submit" class="btn btn-primary">
+                            <a href="{{ route('jadwal-periksa') }}" class="bg-red-500 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2 rounded transition">Batal</a>
+                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white text-xs font-semibold px-4 py-2 rounded transition">
                                 Simpan
                             </button>
                         </form>
