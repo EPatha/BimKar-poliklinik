@@ -75,11 +75,25 @@
         </ul>
     </div>
 
+    <?php if(session('success')): ?>
+        <div 
+            x-data="{ show: true }" 
+            x-show="show" 
+            x-init="setTimeout(() => show = false, 3000)" 
+            x-transition 
+            class="alert alert-success position-fixed top-0 start-50 translate-middle-x mt-4"
+            style="z-index:9999; min-width:300px;"
+        >
+            {{ session('success') }}
+        </div>
+    <?php endif; ?>
+
     <footer class="footer mt-5 py-3 bg-success text-white text-center">
         <div class="container">
             &copy; <script>document.write(new Date().getFullYear())</script> Poliklinik UDINUS. All Rights Reserved.
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
 </body>
 </html>
