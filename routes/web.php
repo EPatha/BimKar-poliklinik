@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\ObatController;
+use App\Http\Controllers\Dokter\DashboardController as DokterDashboardController;
+use App\Http\Controllers\Pasien\DashboardController as PasienDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,5 +39,8 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
 Route::middleware(['auth', 'role:pasien'])->group(function () {
     // route pasien
 });
+
+Route::get('/dashboard-dokter', [DokterDashboardController::class, 'index'])->middleware(['auth']);
+Route::get('/dashboard-pasien', [PasienDashboardController::class, 'index'])->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
