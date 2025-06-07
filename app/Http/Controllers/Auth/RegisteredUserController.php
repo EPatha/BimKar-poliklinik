@@ -33,12 +33,6 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-<<<<<<< HEAD
-            // Tambahkan validasi role jika ingin memilih role saat register
-            // 'role' => 'required|in:dokter,pasien',
-        ]);
-
-=======
             'role' => 'required|in:dokter,pasien',
             'dokter_password' => 'required_if:role,dokter',
         ], [
@@ -50,24 +44,15 @@ class RegisteredUserController extends Controller
             return back()->withInput()->withErrors(['dokter_password' => 'Password dokter salah!']);
         }
 
->>>>>>> 3f95e6d (update welcome, and autentication pasien)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-<<<<<<< HEAD
-            'role' => 'pasien', // Atau $request->role jika ingin memilih role saat register
-=======
             'role' => $request->role,
->>>>>>> 3f95e6d (update welcome, and autentication pasien)
         ]);
 
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3f95e6d (update welcome, and autentication pasien)

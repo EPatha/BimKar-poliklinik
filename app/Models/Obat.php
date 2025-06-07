@@ -16,11 +16,7 @@ class Obat extends Model
         'harga',
     ];
 
-<<<<<<< HEAD
     public function detailPeriksas():HasMany
-=======
-    public function detailPeriksas(): HasMany
->>>>>>> 3f95e6d (update welcome, and autentication pasien)
     {
         return $this->hasMany(DetailPeriksa::class, 'id_obat');
     }

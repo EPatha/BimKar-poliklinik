@@ -7,11 +7,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
->>>>>>> 3f95e6d (update welcome, and autentication pasien)
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -27,13 +24,6 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-<<<<<<< HEAD
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
-
-        $request->session()->regenerate();
-=======
     public function store(Request $request): RedirectResponse
     {
         // $request->session()->authenticate();
@@ -44,7 +34,6 @@ class AuthenticatedSessionController extends Controller
                 'email' => trans('auth.failed'),
             ]);
         }
->>>>>>> 3f95e6d (update welcome, and autentication pasien)
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
