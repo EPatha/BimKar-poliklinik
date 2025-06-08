@@ -36,10 +36,11 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
         'as' => 'dokter'
     ]);
 });
-Route::middleware(['auth', 'role:pasien'])->group(function () {
-    Route::get('/pasien/dashboard', [App\Http\Controllers\Pasien\DashboardController::class, 'index'])->name('pasien.dashboard');
-    Route::get('/pasien/profil', [App\Http\Controllers\Pasien\ProfileController::class, 'index'])->name('pasien.profil');
-    Route::get('/pasien/riwayat', [App\Http\Controllers\Pasien\RiwayatController::class, 'index'])->name('pasien.riwayat');
+Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->name('pasien.')->group(function () {
+    Route::resource('janji', App\Http\Controllers\Pasien\JanjiPeriksaController::class);
+    Route::get('/dashboard', [App\Http\Controllers\Pasien\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profil', [App\Http\Controllers\Pasien\ProfileController::class, 'index'])->name('profil');
+    Route::get('/riwayat', [App\Http\Controllers\Pasien\RiwayatController::class, 'index'])->name('riwayat');
 });
 
 Route::get('/dashboard-dokter', [DokterDashboardController::class, 'index'])->middleware(['auth']);

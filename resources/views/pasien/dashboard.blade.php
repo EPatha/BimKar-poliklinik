@@ -11,9 +11,9 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <p>{{ __("Selamat datang, Pasien!") }}</p>
                     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Menu Profil -->
-                        <a href="{{ route('pasien.profil') }}" class="block p-4 bg-blue-100 dark:bg-blue-900 rounded shadow hover:bg-blue-200 dark:hover:bg-blue-800">
-                            Profil
+                        <!-- Menu Janji Periksa -->
+                        <a href="{{ route('pasien.janji.index') }}" class="block p-4 bg-blue-100 dark:bg-blue-900 rounded shadow hover:bg-blue-200 dark:hover:bg-blue-800">
+                            Janji Periksa
                         </a>
                         <!-- Menu Riwayat Pemeriksaan -->
                         <a href="{{ route('pasien.riwayat') }}" class="block p-4 bg-green-100 dark:bg-green-900 rounded shadow hover:bg-green-200 dark:hover:bg-green-800">
