@@ -43,8 +43,13 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
     Route::get('/periksa/{id}/edit', [PeriksaController::class, 'edit'])->name('dokter.periksa.edit');
     Route::put('/periksa/{id}', [PeriksaController::class, 'update'])->name('dokter.periksa.update');
 });
-Route::middleware(['auth', 'role:pasien'])->group(function () {
-    // route pasien
+Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->name('pasien.')->group(function () {
+    // Untuk resource janji periksa pasien
+    Route::resource('janji', \App\Http\Controllers\Pasien\JanjiPeriksaController::class);
+    // atau jika hanya index:
+    Route::get('janji', [\App\Http\Controllers\Pasien\JanjiPeriksaController::class, 'index'])->name('janji.index');
+    // Route riwayat juga pastikan ada:
+    Route::get('riwayat', [\App\Http\Controllers\Pasien\RiwayatController::class, 'index'])->name('riwayat');
 });
 
 Route::get('/dashboard-dokter', [DokterDashboardController::class, 'index'])->middleware(['auth']);
