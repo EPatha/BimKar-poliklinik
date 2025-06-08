@@ -1,60 +1,57 @@
-# Sistem Informasi Poliklinik
+Analyzes php-code for side-effects.
 
-Sistem Informasi Poliklinik adalah aplikasi berbasis web yang dirancang untuk memudahkan pengelolaan layanan poliklinik, termasuk manajemen pasien, dokter, jadwal pemeriksaan, serta data obat. Aplikasi ini mendukung autentikasi terpisah untuk pasien dan dokter.
+When code has no side-effects it can e.g. be used with `eval($code)` in the same process without interfering.
+[Side-effects are classified](https://github.com/staabm/side-effects-detector/blob/main/lib/SideEffect.php) into categories to filter them more easily depending on your use-case.
 
-## Fitur Utama
+## Install
 
-- **Autentikasi Pengguna**
-  - Login & registrasi untuk pasien
-  - Login untuk dokter
-- **Manajemen Jadwal Periksa**
-  - Pasien dapat membuat janji periksa
-  - Dokter dapat melihat dan mencatat hasil pemeriksaan pasien
-- **Manajemen Obat**
-  - CRUD (Create, Read, Update, Delete) data obat
-- **Dashboard terpisah**
-  - Dashboard khusus untuk pasien
-  - Dashboard khusus untuk dokter
+`composer require staabm/side-effects-detector`
 
-## Teknologi yang Digunakan
+## Usage
 
-- **Backend**: Laravel 12
-- **Database**: MySQL
-- **Frontend**: Blade Template + AdminLTE
-- **Version Control**: GitHub
+Example:
 
-## Struktur Database (ERD)
+```php
+use staabm\SideEffectsDetector\SideEffectsDetector;
 
-1. **Users**
-   - id
-   - nama
-   - alamat
-   - no_hp
-   - email
-   - role (dokter/pasien)
-   - password
+$code = '<?php version_compare(PHP_VERSION, "8.0", ">=") or echo("skip because attributes are only available since PHP 8.0");';
 
-2. **Periksa**
-   - id
-   - id_pasien
-   - id_dokter
-   - tgl_periksa
-   - catatan
-   - biaya_periksa
+$detector = new SideEffectsDetector();
+// [SideEffect::STANDARD_OUTPUT]
+var_dump($detector->getSideEffects($code));
+```
 
-3. **Detail Periksa**
-   - id
-   - id_periksa
-   - id_obat
+In case functions are called which are not known to have side-effects - e.g. userland functions - `null` is returned.
 
-4. **Obat**
-   - id
-   - nama_obat
-   - kemasan
-   - harga
+```php
+use staabm\SideEffectsDetector\SideEffectsDetector;
 
-## Cara Menjalankan Proyek
+$code = '<?php userlandFunction();';
 
-1. Clone repositori ini:
-   ```bash
-   git clone <URL-repo>
+$detector = new SideEffectsDetector();
+// [SideEffect::MAYBE]
+var_dump($detector->getSideEffects($code));
+```
+
+Code might have multiple side-effects:
+
+```php
+use staabm\SideEffectsDetector\SideEffectsDetector;
+
+$code = '<?php include "some-file.php"; echo "hello world"; exit(1);';
+
+$detector = new SideEffectsDetector();
+// [SideEffect::SCOPE_POLLUTION, SideEffect::STANDARD_OUTPUT, SideEffect::PROCESS_EXIT]
+var_dump($detector->getSideEffects($code));
+```
+
+
+## Disclaimer
+
+Non goals are:
+- find the best possible answer for all cases
+- add runtime dependencies
+
+If you are in need of a fully fledged side-effect analysis, use more advanced tools like PHPStan.
+
+Look at the test-suite to get an idea of [supported use-cases](https://github.com/staabm/side-effects-detector/blob/main/tests/SideEffectsDetectorTest.php).
