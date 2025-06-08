@@ -23,6 +23,9 @@
                         <x-nav-link :href="route('dokter.obat.index')" :active="request()->routeIs('dokter.obat.*')">
                             {{ __('Obat') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('dokter.periksa.index')" :active="request()->routeIs('dokter.periksa.*')">
+                            {{ __('Periksa') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -82,6 +85,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dokter.obat.index')" :active="request()->routeIs('dokter.obat.*')">
                     {{ __('Obat') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('dokter.periksa.index')" :active="request()->routeIs('dokter.periksa.*')">
+                    {{ __('Periksa') }}
                 </x-responsive-nav-link>
             @endif
         </div>

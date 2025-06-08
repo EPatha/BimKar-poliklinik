@@ -6,6 +6,7 @@ use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\ObatController;
 use App\Http\Controllers\Dokter\DashboardController as DokterDashboardController;
 use App\Http\Controllers\Pasien\DashboardController as PasienDashboardController;
+use App\Http\Controllers\Dokter\PeriksaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,17 +31,20 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
     Route::get('/jadwal-periksa/{id}/edit', [JadwalPeriksaController::class, 'edit'])->name('jadwal-periksa.edit');
     Route::put('/jadwal-periksa/{id}', [JadwalPeriksaController::class, 'update'])->name('jadwal-periksa.update');
     Route::delete('/jadwal-periksa/{id}', [JadwalPeriksaController::class, 'destroy'])->name('jadwal-periksa.destroy');
-    // ...route lain...
     // Obat
     Route::resource('obat', ObatController::class, [
         'as' => 'dokter'
     ]);
+
+    // Periksa (CRU)
+    Route::get('/periksa', [PeriksaController::class, 'index'])->name('dokter.periksa.index');
+    Route::get('/periksa/create', [PeriksaController::class, 'create'])->name('dokter.periksa.create');
+    Route::post('/periksa', [PeriksaController::class, 'store'])->name('dokter.periksa.store');
+    Route::get('/periksa/{id}/edit', [PeriksaController::class, 'edit'])->name('dokter.periksa.edit');
+    Route::put('/periksa/{id}', [PeriksaController::class, 'update'])->name('dokter.periksa.update');
 });
-Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->name('pasien.')->group(function () {
-    Route::resource('janji', App\Http\Controllers\Pasien\JanjiPeriksaController::class);
-    Route::get('/dashboard', [App\Http\Controllers\Pasien\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profil', [App\Http\Controllers\Pasien\ProfileController::class, 'index'])->name('profil');
-    Route::get('/riwayat', [App\Http\Controllers\Pasien\RiwayatController::class, 'index'])->name('riwayat');
+Route::middleware(['auth', 'role:pasien'])->group(function () {
+    // route pasien
 });
 
 Route::get('/dashboard-dokter', [DokterDashboardController::class, 'index'])->middleware(['auth']);

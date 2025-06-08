@@ -18,9 +18,9 @@ class JanjiPeriksa extends Model
         'no_antrian',
     ];
 
-    public function pasien():BelongsTo
+    public function pasien()
     {
-        return $this->belongsTo(User::class, 'id_pasien');
+        return $this->belongsTo(\App\Models\User::class, 'id_pasien');
     }
 
     public function jadwalPeriksa():BelongsTo

@@ -4,84 +4,85 @@ namespace App\Http\Controllers\Dokter;
 
 use App\Http\Controllers\Controller;
 use App\Models\Periksa;
-use App\Models\Pasien;
+use App\Models\JanjiPeriksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PeriksaController extends Controller
 {
-    // Dashboard daftar periksa untuk dokter
+    // Tampilkan daftar periksa milik dokter
     public function index()
     {
-        // Ambil daftar periksa milik dokter yang login, join dengan pasien
-        $periksas = Periksa::with('pasien')
-            ->where('id_dokter', Auth::user()->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('dokter.periksa.index', compact('periksas'));
+        $janjiPeriksas = \App\Models\JanjiPeriksa::with(['pasien', 'periksa'])->get();
+        return view('dokter.periksa.index', compact('janjiPeriksas'));
     }
 
     // Tampilkan form create periksa
-    public function create($id_pasien)
+    public function create(Request $request)
     {
-        $pasien = Pasien::findOrFail($id_pasien);
-        return view('dokter.periksa.create', compact('pasien'));
+        $id_janji_periksa = $request->id_janji_periksa;
+        $janji = \App\Models\JanjiPeriksa::with(['pasien', 'jadwalPeriksa'])->findOrFail($id_janji_periksa);
+        // Ambil jadwal periksa dokter yang aktif (status=1)
+        $jadwal_aktif = \App\Models\JadwalPeriksa::where('id_dokter', auth()->id())
+            ->where('status', 1)
+            ->get();
+            
+
+        $obats = \App\Models\Obat::all();
+        return view('dokter.periksa.create', compact('janji', 'jadwal_aktif', 'obats'));
     }
 
     // Simpan data periksa baru
     public function store(Request $request)
     {
         $request->validate([
-            'id_pasien' => 'required|exists:pasiens,id',
-            'keluhan' => 'required|string|max:255',
-            // tambahkan validasi lain sesuai kebutuhan
+            'id_janji_periksa' => 'required|exists:janji_periksas,id',
+            'tgl_periksa' => 'required|date',
+            'catatan' => 'required|string',
+            'biaya_periksa' => 'required',
         ]);
 
-        DB::beginTransaction();
         try {
-            Periksa::create([
-                'id_dokter' => Auth::user()->id,
-                'id_pasien' => $request->id_pasien,
-                'keluhan' => $request->keluhan,
-                // tambahkan field lain sesuai kebutuhan
+            $periksa = \App\Models\Periksa::create([
+                'id_janji_periksa' => $request->id_janji_periksa,
+                'tgl_periksa' => $request->tgl_periksa,
+                'catatan' => $request->catatan,
+                'biaya_periksa' => str_replace('.', '', $request->biaya_periksa),
             ]);
-            DB::commit();
-            return redirect()->route('dokter.periksa.index')->with('success', 'Data periksa berhasil ditambahkan!');
+            // Jika ada relasi obat, simpan ke pivot (opsional)
+            // $periksa->obats()->sync($request->obat_id ?? []);
+            return redirect()->route('dokter.periksa.index')->with('success', 'Data periksa berhasil disimpan!');
         } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Gagal menambah data periksa: ' . $e->getMessage());
+            return back()->withErrors(['msg' => 'Gagal menyimpan: ' . $e->getMessage()]);
         }
     }
 
     // Tampilkan form edit periksa
     public function edit($id)
     {
-        $periksa = Periksa::where('id', $id)
-            ->where('id_dokter', Auth::user()->id)
-            ->firstOrFail();
-        $pasien = $periksa->pasien;
-        return view('dokter.periksa.edit', compact('periksa', 'pasien'));
+        $periksa = Periksa::with('janjiPeriksa.pasien')->findOrFail($id);
+        // Untuk edit, janji tidak bisa diganti, hanya tampilkan info
+        return view('dokter.periksa.edit', compact('periksa'));
     }
 
     // Update data periksa
     public function update(Request $request, $id)
     {
         $request->validate([
-            'keluhan' => 'required|string|max:255',
-            // tambahkan validasi lain sesuai kebutuhan
+            'tgl_periksa' => 'required|date',
+            'catatan' => 'required|string',
+            'biaya_periksa' => 'required|integer',
         ]);
 
         DB::beginTransaction();
         try {
-            $periksa = Periksa::where('id', $id)
-                ->where('id_dokter', Auth::user()->id)
-                ->firstOrFail();
-
+            $periksa = Periksa::findOrFail($id);
             $periksa->update([
-                'keluhan' => $request->keluhan,
-                // tambahkan field lain sesuai kebutuhan
+                'tgl_periksa' => $request->tgl_periksa,
+                'catatan' => $request->catatan,
+                'biaya_periksa' => $request->biaya_periksa,
+                'jam_periksa' => $request->jam_periksa,
             ]);
             DB::commit();
             return redirect()->route('dokter.periksa.index')->with('success', 'Data periksa berhasil diupdate!');
