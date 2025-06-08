@@ -1,57 +1,53 @@
-Analyzes php-code for side-effects.
+# BimKar Poliklinik
 
-When code has no side-effects it can e.g. be used with `eval($code)` in the same process without interfering.
-[Side-effects are classified](https://github.com/staabm/side-effects-detector/blob/main/lib/SideEffect.php) into categories to filter them more easily depending on your use-case.
+**BimKar Poliklinik** adalah aplikasi manajemen poliklinik berbasis web yang memudahkan proses administrasi dan pelayanan kesehatan, baik untuk pasien maupun dokter. Aplikasi ini dibangun menggunakan Laravel dan menyediakan fitur lengkap sesuai kebutuhan klinik modern.
 
-## Install
+---
 
-`composer require staabm/side-effects-detector`
+## Fitur Utama
 
-## Usage
+### Untuk Pasien
+- **Dashboard Pasien**  
+  Melihat ringkasan layanan dan status janji periksa.
+- **Janji Periksa**  
+  Membuat, melihat, dan mengelola janji periksa dengan dokter.
+- **Riwayat Pemeriksaan**  
+  Melihat riwayat pemeriksaan lengkap, termasuk:
+  - Tanggal periksa
+  - Keluhan
+  - Catatan dokter
+  - Daftar obat yang diberikan (nama, kemasan, harga per pcs)
+  - Total harga obat
+  - Biaya pemeriksaan
 
-Example:
+### Untuk Dokter
+- **Dashboard Dokter**  
+  Melihat ringkasan jadwal dan aktivitas klinik.
+- **Jadwal Periksa**  
+  Mengatur dan mengelola jadwal praktik.
+- **Manajemen Obat**  
+  Menambah, mengedit, dan menghapus data obat beserta stok dan harga.
+- **Pemeriksaan Pasien**  
+  Melihat daftar janji periksa, melakukan pemeriksaan, mengisi catatan medis, memilih obat, dan menentukan biaya pemeriksaan.
+- **Edit Pemeriksaan**  
+  Mengedit hasil pemeriksaan yang sudah dilakukan.
 
-```php
-use staabm\SideEffectsDetector\SideEffectsDetector;
+---
 
-$code = '<?php version_compare(PHP_VERSION, "8.0", ">=") or echo("skip because attributes are only available since PHP 8.0");';
+## Teknologi
 
-$detector = new SideEffectsDetector();
-// [SideEffect::STANDARD_OUTPUT]
-var_dump($detector->getSideEffects($code));
-```
+- Laravel (PHP Framework)
+- MySQL/MariaDB
+- Tailwind CSS (untuk tampilan)
+- Blade Template
 
-In case functions are called which are not known to have side-effects - e.g. userland functions - `null` is returned.
+---
 
-```php
-use staabm\SideEffectsDetector\SideEffectsDetector;
+## Developer
 
-$code = '<?php userlandFunction();';
+**Nama:** Ephesians Prismaranatha  
+**NIM:** A11.2022.14632
 
-$detector = new SideEffectsDetector();
-// [SideEffect::MAYBE]
-var_dump($detector->getSideEffects($code));
-```
+---
 
-Code might have multiple side-effects:
-
-```php
-use staabm\SideEffectsDetector\SideEffectsDetector;
-
-$code = '<?php include "some-file.php"; echo "hello world"; exit(1);';
-
-$detector = new SideEffectsDetector();
-// [SideEffect::SCOPE_POLLUTION, SideEffect::STANDARD_OUTPUT, SideEffect::PROCESS_EXIT]
-var_dump($detector->getSideEffects($code));
-```
-
-
-## Disclaimer
-
-Non goals are:
-- find the best possible answer for all cases
-- add runtime dependencies
-
-If you are in need of a fully fledged side-effect analysis, use more advanced tools like PHPStan.
-
-Look at the test-suite to get an idea of [supported use-cases](https://github.com/staabm/side-effects-detector/blob/main/tests/SideEffectsDetectorTest.php).
+Terima kasih telah menggunakan aplikasi ini. Silakan hubungi developer untuk saran dan pengembangan lebih lanjut.
