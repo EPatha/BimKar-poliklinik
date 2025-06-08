@@ -7,7 +7,7 @@
     <div class="py-8">
         <div class="max-w-5xl mx-auto bg-white dark:bg-gray-900 p-8 rounded shadow">
             @if(session('success'))
-                <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 2000)" x-show="show"
+                <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
                     class="mb-4 px-4 py-2 rounded bg-green-500 text-white text-center shadow transition-all duration-500">
                     {{ session('success') }}
                 </div>

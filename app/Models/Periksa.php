@@ -38,4 +38,8 @@ class Periksa extends Model
     public function pasien() {
         return $this->belongsTo(\App\Models\User::class, 'id_pasien');
     }
+    public function obats()
+    {
+        return $this->belongsToMany(\App\Models\Obat::class, 'periksa_obat', 'id_periksa', 'id_obat');
+    }
 }

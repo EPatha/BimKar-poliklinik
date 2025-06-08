@@ -61,9 +61,12 @@ class PeriksaController extends Controller
     // Tampilkan form edit periksa
     public function edit($id)
     {
-        $periksa = Periksa::with('janjiPeriksa.pasien')->findOrFail($id);
-        // Untuk edit, janji tidak bisa diganti, hanya tampilkan info
-        return view('dokter.periksa.edit', compact('periksa'));
+        $periksa = \App\Models\Periksa::with(['janjiPeriksa.pasien', 'obats'])->findOrFail($id);
+        $obats = \App\Models\Obat::all();
+        $jadwal_aktif = \App\Models\JadwalPeriksa::where('id_dokter', auth()->id())
+            ->where('status', 1)
+            ->get();
+        return view('dokter.periksa.edit', compact('periksa', 'obats', 'jadwal_aktif'));
     }
 
     // Update data periksa
@@ -71,19 +74,26 @@ class PeriksaController extends Controller
     {
         $request->validate([
             'tgl_periksa' => 'required|date',
+            'jam_periksa' => 'required|string',
             'catatan' => 'required|string',
-            'biaya_periksa' => 'required|integer',
+            'biaya_periksa' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
-            $periksa = Periksa::findOrFail($id);
+            $periksa = \App\Models\Periksa::findOrFail($id);
             $periksa->update([
                 'tgl_periksa' => $request->tgl_periksa,
-                'catatan' => $request->catatan,
-                'biaya_periksa' => $request->biaya_periksa,
                 'jam_periksa' => $request->jam_periksa,
+                'catatan' => $request->catatan,
+                'biaya_periksa' => str_replace('.', '', $request->biaya_periksa),
             ]);
+            // Sync obat ke pivot table jika ada
+            if ($request->has('obat_id')) {
+                $periksa->obats()->sync($request->obat_id);
+            } else {
+                $periksa->obats()->sync([]); // kosongkan jika tidak ada yang dipilih
+            }
             DB::commit();
             return redirect()->route('dokter.periksa.index')->with('success', 'Data periksa berhasil diupdate!');
         } catch (\Exception $e) {
