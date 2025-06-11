@@ -12,6 +12,8 @@
                         <tr class="bg-gray-100 dark:bg-white-800">
                             <th class="px-4 py-2">No</th>
                             <th class="px-4 py-2">Tanggal Periksa</th>
+                            <th class="px-4 py-2">Nama Dokter</th>
+                            <th class="px-4 py-2">Poli</th>
                             <th class="px-4 py-2">Keluhan</th>
                             <th class="px-4 py-2">Catatan Dokter</th>
                             <th class="px-4 py-2">Obat</th>
@@ -24,6 +26,8 @@
                         <tr>
                             <td class="bg-white text-black px-4 py-2 text-center">{{ $loop->iteration }}</td>
                             <td class="bg-white text-blackpx-4 py-2">{{ Carbon\Carbon::parse($periksa->tgl_periksa)->format('d-m-Y') }}</td>
+                            <td class="bg-white text-blackpx-4 py-2">{{ $periksa->janjiPeriksa->jadwalPeriksa->dokter->nama ?? '-' }}</td>
+                            <td class="bg-white text-blackpx-4 py-2">{{ $periksa->janjiPeriksa->jadwalPeriksa->dokter->poli ?? '-' }}</td>
                             <td class="bg-white text-blackpx-4 py-2">{{ $periksa->janjiPeriksa->keluhan ?? '-' }}</td>
                             <td class="bg-white text-blackpx-4 py-2">{{ $periksa->catatan ?? '-' }}</td>
                             <td class="bg-white text-blackpx-4 py-2">
