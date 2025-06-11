@@ -18,14 +18,24 @@ class JanjiPeriksaController extends Controller
 
     public function create()
     {
-        $jadwal = JadwalPeriksa::all();
+        // Hanya jadwal aktif (status=1) yang bisa dipilih pasien
+        $jadwal = JadwalPeriksa::where('status', 1)->get();
         return view('pasien.janji.create', compact('jadwal'));
     }
 
     public function store(Request $request)
     {
+        // Validasi agar hanya jadwal aktif yang bisa dipilih
         $request->validate([
-            'id_jadwal_periksa' => 'required|exists:jadwal_periksas,id',
+            'id_jadwal_periksa' => [
+                'required',
+                'exists:jadwal_periksas,id',
+                function($attribute, $value, $fail) {
+                    if (!JadwalPeriksa::where('id', $value)->where('status', 1)->exists()) {
+                        $fail('Jadwal periksa yang dipilih tidak aktif.');
+                    }
+                }
+            ],
             'keluhan' => 'required|string|max:255',
         ]);
 
@@ -44,16 +54,24 @@ class JanjiPeriksaController extends Controller
     public function edit($id)
     {
         $janji = JanjiPeriksa::where('id', $id)->where('id_pasien', Auth::id())->firstOrFail();
-        $jadwal = JadwalPeriksa::all();
+        // Hanya jadwal aktif yang bisa dipilih saat edit
+        $jadwal = JadwalPeriksa::where('status', 1)->get();
         return view('pasien.janji.edit', compact('janji', 'jadwal'));
     }
 
     public function update(Request $request, $id)
     {
         $janji = JanjiPeriksa::where('id', $id)->where('id_pasien', Auth::id())->firstOrFail();
-
         $request->validate([
-            'id_jadwal_periksa' => 'required|exists:jadwal_periksas,id',
+            'id_jadwal_periksa' => [
+                'required',
+                'exists:jadwal_periksas,id',
+                function($attribute, $value, $fail) {
+                    if (!JadwalPeriksa::where('id', $value)->where('status', 1)->exists()) {
+                        $fail('Jadwal periksa yang dipilih tidak aktif.');
+                    }
+                }
+            ],
             'keluhan' => 'required|string|max:255',
         ]);
 

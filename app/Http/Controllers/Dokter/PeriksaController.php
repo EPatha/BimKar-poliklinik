@@ -14,7 +14,12 @@ class PeriksaController extends Controller
     // Tampilkan daftar periksa milik dokter
     public function index()
     {
-        $janjiPeriksas = \App\Models\JanjiPeriksa::with(['pasien', 'periksa'])->get();
+        // Ambil semua jadwal periksa milik dokter yang sedang login
+        $jadwalIds = \App\Models\JadwalPeriksa::where('id_dokter', Auth::id())->pluck('id');
+        // Ambil janji periksa yang hanya terkait jadwal dokter ini
+        $janjiPeriksas = \App\Models\JanjiPeriksa::with(['pasien', 'periksa', 'jadwalPeriksa'])
+            ->whereIn('id_jadwal_periksa', $jadwalIds)
+            ->get();
         return view('dokter.periksa.index', compact('janjiPeriksas'));
     }
 

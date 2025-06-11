@@ -14,6 +14,8 @@
                     <select name="id_jadwal_periksa" required class="w-full border-gray-300 rounded p-2">
                         @foreach($jadwal as $j)
                             <option value="{{ $j->id }}" {{ $janji->id_jadwal_periksa == $j->id ? 'selected' : '' }}>
+                                {{ $j->dokter->nama ?? '-' }} | 
+                                {{ $j->dokter->poli ?? '-' }} | 
                                 {{ $j->hari }} - {{ $j->jam_mulai }} s/d {{ $j->jam_selesai }}
                             </option>
                         @endforeach
