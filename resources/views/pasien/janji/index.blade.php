@@ -26,6 +26,8 @@
                         <tr class="bg-blue-100 dark:bg-blue-800">
                             <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">No</th>
                             <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">Jadwal</th>
+                            <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">Dokter</th>
+                            <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">Poli</th>
                             <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">Keluhan</th>
                             <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">No Antrian</th>
                             <th class="px-4 py-2 text-gray-800 dark:text-gray-100 font-bold">Aksi</th>
@@ -40,6 +42,12 @@
                                 <span class="text-sm text-gray-600">
                                     {{ $j->jadwalPeriksa->jam_mulai ?? '' }} - {{ $j->jadwalPeriksa->jam_selesai ?? '' }}
                                 </span>
+                            </td>
+                            <td class="px-4 py-2 !text-black">
+                                {{ $j->jadwalPeriksa->dokter->nama ?? '-' }}<br>
+                            </td>
+                             <td class="px-4 py-2 !text-black">
+                                {{ $j->jadwalPeriksa->dokter->poli ?? '-' }}<br>
                             </td>
                             <td class="px-4 py-2 !text-black">{{ $j->keluhan }}</td>
                             <td class="px-4 py-2 text-center !text-black">{{ $j->no_antrian }}</td>
